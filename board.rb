@@ -27,8 +27,6 @@ class Board
     pieces = grid.flatten.compact
     pieces.none? { |piece| piece.color == :red } ||
     pieces.none? { |piece| piece.color == :black }
-
-    false
   end
 
   def jump_moves(color)

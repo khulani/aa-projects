@@ -5,7 +5,8 @@ class Game
 
   def initialize
     @board = Board.new
-    board.setup_board
+    # board.setup_board
+    board.load_scenario
     @cursor = [0, 0]
     @selected = []
     @player = 'Player 1'
@@ -55,7 +56,7 @@ class Game
   end
 
   def finish
-    message = "#{turns[player]} wins! Game over."
+    self.message = "#{turns[player][0]} wins! Game over."
     display_game
   end
 

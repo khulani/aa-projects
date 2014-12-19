@@ -38,7 +38,7 @@ class Piece
   end
 
   def make_king
-    if (color == :black && pos[0] == 0) || (color == :white && pos[0] == 7)
+    if (color == :black && pos[0] == 0) || (color == :red && pos[0] == 7)
       self.type = :king
     end
   end
@@ -58,7 +58,7 @@ class Piece
       mid_sq = [pos[0] + DELTAS[i][0], pos[1] + DELTAS[i][1]]
       land_sq = [pos[0] + DELTAS[i + 1][0], pos[1] + DELTAS[i + 1][1]]
       next unless in_range?(land_sq) || in_range?(land_sq)
-      
+
       mid = board[mid_sq]
       land = board[land_sq]
       unless mid.nil? || !land.nil? || mid.color == color
