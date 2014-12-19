@@ -13,15 +13,17 @@ class Piece
 
   def initialize position, type, color, board
     @pos = position
-    @type = :pawn
+    @type = type
     @color = color
     @board = board
   end
 
+  def in_range? there
+    (0..7).include?(there[0]) && (0..7).include?(there[1])
+  end
+
   def check_move there
-    unless (0..7).include?(there[0]) || (0..7).include?(there[1])
-      raise MoveError.new "Not on board"
-    end
+    raise MoveError.new "Not on board" unless in_range? there
     raise MoveError.new "Square not empty." unless board[there].nil?
 
     deltas = []
@@ -53,9 +55,15 @@ class Piece
     range = DIR[:king] if type == :king
 
     (range[0]..range[1]).step(2) do |i|
-      mid = board[[pos[0] + DELTAS[i][0], pos[1] + DELTAS[i][1]]]
-      land = board[[pos[0] + DELTAS[i + 1][0], pos[0] + DELTAS[i + 1][1]]]
-      return true unless mid.nil? || land.nil? || mid.color == color
+      mid_sq = [pos[0] + DELTAS[i][0], pos[1] + DELTAS[i][1]]
+      land_sq = [pos[0] + DELTAS[i + 1][0], pos[1] + DELTAS[i + 1][1]]
+      next unless in_range?(land_sq) || in_range?(land_sq)
+      
+      mid = board[mid_sq]
+      land = board[land_sq]
+      unless mid.nil? || !land.nil? || mid.color == color
+        return true
+      end
     end
 
     false

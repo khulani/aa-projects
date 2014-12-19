@@ -47,8 +47,8 @@ class Game
     when ' '
       board.run_move(selected, turns[player][1])
       self.player = turns[player][0]
-      selected = []
-      message = nil
+      self.selected = []
+      self.message = nil
     when 'q'
       exit
     end

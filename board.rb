@@ -41,28 +41,34 @@ class Board
     jumps
   end
 
-  def run_move(sequence, color)
+  def run_move(seq, color)
     # p sequence
     # gets
     board_copy = self.dup
-    jumps = jump_moves(color)
-    if sequence.size < 2
+
+    if seq.size < 2
       raise MoveError.new "Sequence incomplete."
-    elsif self[sequence.first].nil?
+    elsif self[seq.first].nil?
       raise MoveError.new "Piece not selected"
-    elsif self[sequence.first].color != color
+    elsif self[seq.first].color != color
       raise MoveError.new "Piece is not yours"
-    elsif !jumps.empty? && !jumps.include?(sequence.first)
-      raise MoveError.new "Must jump when available"
-    elsif (sequence[1][0] - sequence[0][0]).abs == 1
-      raise MoveError.new "Multiple moves for jumps only." if sequence.size > 2
-      board_copy[sequence[0]].perform_slide sequence[1]
     else
-      (1...sequence.size).each do |i|
-        board_copy[sequence[i-1]].perform_jump sequence[i]
-      end
-      if board_copy[sequence.last].jump_available?
-        raise MoveError.new "Must jump when possible."
+      p jumps = jump_moves(color)
+      if !jumps.empty? && !jumps.include?(seq.first)
+        raise MoveError.new "Must jump when possible"
+      elsif (seq[1][0] - seq[0][0]).abs == 1
+        raise MoveError.new "Multiple moves for jumps only." if seq.size > 2
+        board_copy[seq[0]].perform_slide seq[1]
+      else
+        (1...seq.size).each do |i|
+
+          board_copy[seq[i-1]].perform_jump seq[i]
+        end
+        if board_copy[seq.last].jump_available?
+          # p seq.last
+          # gets
+          raise MoveError.new "Must jump when possible."
+        end
       end
     end
 
